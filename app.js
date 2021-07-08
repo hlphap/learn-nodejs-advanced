@@ -2,6 +2,10 @@ const express = require("express")
 const morgan = require("morgan")
 
 const routes = require("./src/routes/index");
+const connect = require("./src/config/db/connect")
+
+
+connect();
 
 const app = express();
 
