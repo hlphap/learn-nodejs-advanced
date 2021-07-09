@@ -8,10 +8,10 @@ function connect() {
         useCreateIndex: true,
     })
         .then(()=>{
-            console.log("Connected Successfully");
+            console.log(`✅Connected Successfully`);
         })
         .catch((error)=>{
-            console.log(`Connect is failed ${error}`)
+            console.log(`❌Connect is failed ${error}`)
         })
 }
-module.exports = connect;
+module.exports = {connect};

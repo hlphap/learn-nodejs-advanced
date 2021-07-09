@@ -2,15 +2,18 @@ const express = require("express")
 const morgan = require("morgan")
 
 const routes = require("./src/routes/index");
-const connect = require("./src/config/db/connect")
+const db = require("./src/config/db/connect")
 
 
-connect();
+//Connect DB
+db.connect();
 
 const app = express();
 
 //Middleware
-app.use(morgan("dev"));
+app.use(morgan("dev"))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 //Routes
 routes(app);

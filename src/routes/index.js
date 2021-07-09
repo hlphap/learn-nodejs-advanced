@@ -1,7 +1,7 @@
-const userController = require("../app/controllers/UserController");
+const userRouter = require("./users");
 
 function routes(app){
-    app.use("/users",userController.index);
+    app.use("/users",userRouter);
 }
 
 module.exports = routes;

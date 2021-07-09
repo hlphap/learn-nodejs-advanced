@@ -15,6 +15,10 @@ const User = Schema({
         type: Schema.Types.ObjectId,
         ref: "Deck"
     }]
+},{
+    //Option
+    timestamps: true,
+    versionKey: false,
 })
 
 module.exports = mongoose.model("users", User);
