@@ -7,4 +7,10 @@ router.route("/")
     .get(userController.index)
     .post(userController.newUser)
 
+router.route("/:userID")
+    .get(userController.show)
+    .put(userController.replace)
+    .patch(userController.update)
+
+
 module.exports = router;
