@@ -12,5 +12,8 @@ router.route("/:userID")
     .put(userController.replace)
     .patch(userController.update)
 
+router.route("/:userID/decks")
+    .get(userController.getUserDecks)
+    .post(userController.newUserDecks)
 
 module.exports = router;

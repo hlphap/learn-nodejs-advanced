@@ -1,24 +1,25 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const User = Schema({
-    firstName : {
+const Deck = Schema({
+    name : {
         type: String
     },
-    lastName: {
+    description: {
         type: String
     },
-    email:{
-        type: String,
+    total:{
+        type: Number,
+        default: 0,
     },
-    decks: [{
+    owner: {
         type: Schema.Types.ObjectId,
-        ref: "decks"
-    }]
+        ref: "users"
+    }
 },{
     //Option
     timestamps: true,
     versionKey: false,
 })
 
-module.exports = mongoose.model("users", User);
+module.exports = mongoose.model("decks", Deck);
