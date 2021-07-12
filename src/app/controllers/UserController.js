@@ -124,6 +124,8 @@ class UserController {
     //[GET] /users/secret
     async secret(req, res, next) {
         console.log("Called to secret");
+        console.log(req.user);
+        return res.status(200).json({ resource: true });
     }
 
 }
