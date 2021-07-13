@@ -8,8 +8,14 @@ const { validateBody, validateParam, schema } = require("../helpers/routerHelper
 const passport = require("passport");
 const passportConfig = require("../middlewares/passport");
 
+router.route("/auth/facebook")
+    .post(passport.authenticate("facebook-token", { session: false }), userController.authFacebook);
+
+router.route("/auth/google")
+    .post(passport.authenticate("google-plus-token", { session: false }), userController.authGoogle);
+
 router.route("/signin")
-    .post(validateBody(schema.authSignInSchema), userController.signIn);
+    .post(validateBody(schema.authSignInSchema), passport.authenticate("local", { session: false }), userController.signIn);
 
 router.route("/signup")
     .post(validateBody(schema.authSignUpSchema), userController.signUp);

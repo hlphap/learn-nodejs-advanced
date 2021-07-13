@@ -1,15 +1,16 @@
-const JWT = require('jsonwebtoken');
-const { JWT_SECRET } = require('../../configs/index')
+const JWT = require("jsonwebtoken");
+const { JWT_SECRET } = require("../../configs/index");
 
 const User = require("../models/user");
 const Deck = require("../models/deck");
 
-const encodedToken = (userID) => {
+//Encode from userID
+function encodedToken(userID) {
     return JWT.sign({
-        iss: "Phap Huynh",
         sub: userID,
+        iss: "Phap Huynh",
         iat: new Date().getTime(),
-        exp: new Date().setDate(new Date().getDate() + 3)
+        exp: new Date().setDate(new Date().getDate() + 3),
     }, JWT_SECRET)
 }
 class UserController {
@@ -91,6 +92,10 @@ class UserController {
         res.status(200).json({ deck: newDeck });
     }
 
+    async signIn(req, res, next) {
+        console.log("Called to sign in");
+    }
+
     //[POST] /users/signup
     async signUp(req, res, next) {
         const { firstName, lastName, email, password } = req.value.body;
@@ -101,7 +106,7 @@ class UserController {
 
         if (foundUser) return res.status(403).json({
             error: {
-                message: "Email already exists",
+                message: "email already exists",
                 status: "403",
             }
         })
@@ -118,16 +123,29 @@ class UserController {
 
     //[POST] /users/signin
     async signIn(req, res, next) {
-        console.log("Called sign in");
+        const token = encodedToken(req.user._id);
+        res.setHeader("Authorization", token);
+        res.status(200).json({ resource: true });
     }
 
     //[GET] /users/secret
     async secret(req, res, next) {
-        console.log("Called to secret");
-        console.log(req.user);
-        return res.status(200).json({ resource: true });
+        console.log("Called secret");
+        return res.status(200).json({ success: true });
     }
 
+    //[POST] /users/auth/google
+    async authGoogle(req, res, next) {
+        const token = encodedToken(req.user._id);
+        res.setHeader("Authorization", token);
+        res.status(200).json({ resource: true });
+    }
+
+    async authFacebook(req, res, next) {
+        const token = encodedToken(req.user._id);
+        res.setHeader("Authorization", token);
+        res.status(200).json({ resource: true });
+    }
 }
 
 module.exports = new UserController();

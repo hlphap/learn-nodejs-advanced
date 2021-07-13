@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const bcrypt = require("bcryptjs")
+
 const User = Schema({
     firstName: {
-        type: String
+        type: String,
     },
     lastName: {
-        type: String
+        type: String,
     },
     email: {
         type: String,
@@ -16,16 +18,55 @@ const User = Schema({
     },
     password: {
         type: String,
-        require: true,
+    },
+    authGoogleID: {
+        type: String,
+        default: null,
+    },
+    authFacebookID: {
+        type: String,
+        default: null,
+    },
+    authType: {
+        type: String,
+        enum: ["local", "google", "facebook"],
+        default: "local",
     },
     decks: [{
         type: Schema.Types.ObjectId,
-        ref: "decks"
+        ref: "decks",
     }]
 }, {
-    //Option
+    //Options
     timestamps: true,
     versionKey: false,
 })
 
+User.pre("save", async function (next) {
+    try {
+        if (this.authType !== "local") next();
+
+        //Generate a salt
+        const salt = await bcrypt.genSalt(10);
+
+        //Generate password hash (salt + hash)
+        const passwordHashed = await bcrypt.hash(this.password, salt);
+
+        //Re-assign the password hashed
+        this.password = passwordHashed;
+
+        //Next Function
+        next();
+    } catch (err) {
+        next(err);
+    }
+})
+
+User.methods.isValidPassword = async function (newPassword) {
+    try {
+        return await bcrypt.compare(newPassword, this.password);
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 module.exports = mongoose.model("users", User);
