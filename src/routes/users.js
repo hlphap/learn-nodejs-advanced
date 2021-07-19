@@ -5,8 +5,7 @@ const userController = require("../app/controllers/UserController");
 
 const { validateBody, validateParam, schema } = require("../helpers/routerHelpers");
 
-const passport = require("passport");
-const passportConfig = require("../middlewares/passport");
+const passport = require("../middlewares/passport");
 
 router.route("/auth/facebook")
     .post(passport.authenticate("facebook-token", { session: false }), userController.authFacebook);
@@ -24,20 +23,18 @@ router.route("/secret")
     .get(passport.authenticate("jwt", { session: false }), userController.secret);
 
 router.route("/")
-    .get(userController.index)
+    .get(passport.authenticate("jwt", { session: false }), userController.index)
     .post(validateBody(schema.userSchema), userController.newUser)
 
 router.route("/:userID")
-    .all(validateParam(schema.idSchema, "userID"))
+    .all(passport.authenticate("jwt", { session: false }), validateParam(schema.idSchema, "userID"))
     .get(userController.show)
     .put(validateBody(schema.userSchema), userController.replace)
     .patch(validateBody(schema.userOptionalSchema), userController.update)
 
 router.route("/:userID/decks")
-    .all(validateParam(schema.idSchema, "userID"))
+    .all(passport.authenticate("jwt", { session: false }), validateParam(schema.idSchema, "userID"))
     .get(userController.getUserDecks)
     .post(validateBody(schema.deckSchema), userController.newUserDecks)
-
-
 
 module.exports = router;

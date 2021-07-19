@@ -1,13 +1,13 @@
 const Deck = require("../models/deck");
 const User = require("../models/user")
 
-class DeckController{
-    async index(req, res, next){
+class DeckController {
+    async index(req, res, next) {
         const decks = await Deck.find({});
         return res.status(200).json(decks);
     }
 
-    async newDeck(req, res, next){
+    async newDeck(req, res, next) {
         //Find owner
         const owner = await User.findById(req.value.body.owner);
 
@@ -21,41 +21,41 @@ class DeckController{
         await owner.save();
 
         //Return client
-        return res.status(201).json({success: true});
+        return res.status(201).json({ success: true });
     }
 
-    async show(req, res, next){
-        const {deckID} = req.value.params;
+    async show(req, res, next) {
+        const { deckID } = req.value.params;
         const deck = await Deck.findById(deckID);
-        return res.status(200).json({"deck" : deck});
+        return res.status(200).json({ "deck": deck });
     }
 
-    async replace(req, res, next){
+    async replace(req, res, next) {
         //Get data
-        const {deckID} = req.value.params;
+        const { deckID } = req.value.params;
         const deck = req.value.body;
 
         //Update Deck from deckID
         await Deck.findByIdAndUpdate(deckID, deck);
 
         //Return client
-        return res.status(200).json({success: true});
+        return res.status(200).json({ success: true });
     }
 
-    async update(req, res, next){
+    async update(req, res, next) {
         //Get data
-        const {deckID} = req.value.params;
+        const { deckID } = req.value.params;
         const deck = req.value.body;
 
         //Update Deck from deckID
         await Deck.findByIdAndUpdate(deckID, deck);
 
         //Return client
-        return res.status(200).json({success: true});
+        return res.status(200).json({ success: true });
     }
 
-    async delete(req, res, next){
-        const {deckID} = req.value.params;
+    async delete(req, res, next) {
+        const { deckID } = req.value.params;
 
         //Get deck
         const deck = await Deck.findById(deckID);
@@ -73,7 +73,7 @@ class DeckController{
         //Owner saved
         await owner.save();
 
-        return res.status(200).json({success: true});
+        return res.status(200).json({ success: true });
     }
 }
 

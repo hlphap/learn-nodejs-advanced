@@ -46,6 +46,8 @@ User.pre("save", async function (next) {
     try {
         if (this.authType !== "local") next();
 
+        if (!this.password) next();
+
         //Generate a salt
         const salt = await bcrypt.genSalt(10);
 

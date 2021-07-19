@@ -120,3 +120,5 @@ passport.use(new FacebookTokenStrategy({
         return done(error, false);
     }
 }))
+
+module.exports = passport;
